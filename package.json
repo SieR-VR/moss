@@ -1,0 +1,27 @@
+{
+  "name": "moss",
+  "version": "1.0.0",
+  "description": "Most optional style sheet",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/SieR-VR/moss.git"
+  },
+  "keywords": [],
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/SieR-VR/moss/issues"
+  },
+  "homepage": "https://github.com/SieR-VR/moss#readme",
+  "dependencies": {
+    "css": "^3.0.0"
+  },
+  "devDependencies": {
+    "@types/css": "^0.0.33",
+    "@types/node": "^18.11.9"
+  }
+}
