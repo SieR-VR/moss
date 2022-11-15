@@ -21,7 +21,7 @@ interface Moss {
 }
 
 const moss: Moss = {
-    position: { x: 500, y: 300 },
+    position: { x: 200, y: 300 },
     z: 0,
     scale: { x: "30px", y: "30px" },
     rotation: { angle: 0 },
