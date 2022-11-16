@@ -19,7 +19,8 @@
   "homepage": "https://github.com/SieR-VR/moss#readme",
   "dependencies": {
     "css": "^3.0.0",
-    "csstype": "^3.1.1"
+    "csstype": "^3.1.1",
+    "pegts": "^0.0.3"
   },
   "devDependencies": {
     "@types/css": "^0.0.33",

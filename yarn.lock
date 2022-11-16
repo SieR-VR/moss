@@ -41,6 +41,11 @@ inherits@^2.0.4:
   resolved "https://registry.yarnpkg.com/inherits/-/inherits-2.0.4.tgz#0fa2c64f932917c3433a0ded55363aae37416b7c"
   integrity sha512-k/vGaX4/Yla3WzyMCvTQOXYeIHvqOKtnqBduzTHpzpQZzAskKMhZ2K+EnBiSM9zGSoIFeMpXKxa4dYeZIQqewQ==
 
+pegts@^0.0.3:
+  version "0.0.3"
+  resolved "https://registry.yarnpkg.com/pegts/-/pegts-0.0.3.tgz#6a7d4825619ff383b55d0e953457755df391252f"
+  integrity sha512-WKpXlwUbocmsmxxvGzNh9tgTYzB0+C7Pl5KtsaN7/MFS0e57f/R6+6gz6z+pfDx1ENTyL2esVIc4B26aRW7xYg==
+
 source-map-resolve@^0.6.0:
   version "0.6.0"
   resolved "https://registry.yarnpkg.com/source-map-resolve/-/source-map-resolve-0.6.0.tgz#3d9df87e236b53f16d01e58150fc7711138e5ed2"
