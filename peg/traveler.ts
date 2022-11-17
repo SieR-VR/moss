@@ -127,3 +127,54 @@ function travelPropertyName(name: Parser.PropertyName): Syntax.PropertyName {
         text: name.text,
     };
 }
+
+export function isStatement(node: Syntax.Node): node is Syntax.Statement {
+    return node.kind === "ImportStatement"
+        || node.kind === "StyleStatement"
+        || node.kind === "TransformStatement"
+        || node.kind === "AnimationStatement";
+}
+
+export function isImportStatement(node: Syntax.Node): node is Syntax.ImportStatement {
+    return node.kind === "ImportStatement";
+}
+
+export function isStyleStatement(node: Syntax.Node): node is Syntax.StyleStatement {
+    return node.kind === "StyleStatement";
+}
+
+export function isTransformStatement(node: Syntax.Node): node is Syntax.TransformStatement {
+    return node.kind === "TransformStatement";
+}
+
+export function isAnimationStatement(node: Syntax.Node): node is Syntax.AnimationStatement {
+    return node.kind === "AnimationStatement";
+}
+
+export function isGenericBlock(node: Syntax.Node): node is Syntax.GenericBlock {
+    return node.kind === "GenericBlock";
+}
+
+export function isAnimationBlock(node: Syntax.Node): node is Syntax.AnimationBlock {
+    return node.kind === "AnimationBlock";
+}
+
+export function isGenericElement(node: Syntax.Node): node is Syntax.GenericElement {
+    return node.kind === "GenericElement";
+}
+
+export function isAnimationElement(node: Syntax.Node): node is Syntax.AnimationElement {
+    return node.kind === "AnimationElement";
+}
+
+export function isIdentifier(node: Syntax.Node): node is Syntax.Identifier {
+    return node.kind === "Identifier";
+}
+
+export function isStringLiteral(node: Syntax.Node): node is Syntax.StringLiteral {
+    return node.kind === "StringLiteral";
+}
+
+export function isPropertyName(node: Syntax.Node): node is Syntax.PropertyName {
+    return node.kind === "PropertyName";
+}
