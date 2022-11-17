@@ -1,6 +1,8 @@
 import { ParseResult, parse } from "../moss.parser";
 
 const transform = parse(`
+    import ButtonTransform, Props from "./style.moss";
+
     transform ButtonTransform : Transform {
         position: 0, 0;
     }
