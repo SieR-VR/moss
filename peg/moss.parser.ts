@@ -2,13 +2,14 @@
 * INPUT GRAMMAR:
 * SourceFile := stmts=Statement*
 * Statement := StyleStatement | TransformStatement | AnimationStatement
-* StyleStatement := Whitespace* 'style' Whitespace+ name=Identifier Whitespace* block=Block Whitespace*
-* TransformStatement := Whitespace* 'transform' Whitespace+ name=Identifier Whitespace+ block=Block Whitespace* 
-* AnimationStatement := Whitespace* 'animation' Whitespace+ name=Identifier Whitespace+ block=AnimationBlock Whitespace*
+* StyleStatement := Whitespace* 'style' Whitespace+ name=Identifier Whitespace* parents={ HeritageClause }? Whitespace* block=Block Whitespace*
+* TransformStatement := Whitespace* 'transform' Whitespace+ name=Identifier Whitespace* parents={ HeritageClause }? Whitespace* block=Block Whitespace* 
+* AnimationStatement := Whitespace* 'animation' Whitespace+ name=Identifier Whitespace* parents={ HeritageClause }? Whitespace* block=AnimationBlock Whitespace*
 * SelectorStatement := selector=Selector Whitespace+ block=Block
 * Block := '\{' Whitespace+ elements={ element=Element Whitespace* }* '\}'
 * AnimationBlock := '{' Whitespace+ elements={ progress=AnimationProgress element=Block Whitespace* }* '}'
 * // SelectorBlock := '{' Whitespace+ elements=(element=SelectorElement Whitespace+)* '}'
+* HeritageClause := ':' Whitespace* first=Identifier Whitespace* last={ ',' Whitespace* next=Identifier Whitespace* }*
 * Element := name=PropertyName Whitespace* ':' Whitespace* value=PropertyValue Whitespace* ';'
 * Identifier := text='[a-zA-Z_][a-zA-Z0-9_]+'
 * Whitespace := '[ \t\r\n]'
@@ -28,13 +29,18 @@ export enum ASTKinds {
     Statement_2 = "Statement_2",
     Statement_3 = "Statement_3",
     StyleStatement = "StyleStatement",
+    StyleStatement_$0 = "StyleStatement_$0",
     TransformStatement = "TransformStatement",
+    TransformStatement_$0 = "TransformStatement_$0",
     AnimationStatement = "AnimationStatement",
+    AnimationStatement_$0 = "AnimationStatement_$0",
     SelectorStatement = "SelectorStatement",
     Block = "Block",
     Block_$0 = "Block_$0",
     AnimationBlock = "AnimationBlock",
     AnimationBlock_$0 = "AnimationBlock_$0",
+    HeritageClause = "HeritageClause",
+    HeritageClause_$0 = "HeritageClause_$0",
     Element = "Element",
     Identifier = "Identifier",
     Whitespace = "Whitespace",
@@ -54,18 +60,24 @@ export type Statement_3 = AnimationStatement;
 export interface StyleStatement {
     kind: ASTKinds.StyleStatement;
     name: Identifier;
+    parents: Nullable<StyleStatement_$0>;
     block: Block;
 }
+export type StyleStatement_$0 = HeritageClause;
 export interface TransformStatement {
     kind: ASTKinds.TransformStatement;
     name: Identifier;
+    parents: Nullable<TransformStatement_$0>;
     block: Block;
 }
+export type TransformStatement_$0 = HeritageClause;
 export interface AnimationStatement {
     kind: ASTKinds.AnimationStatement;
     name: Identifier;
+    parents: Nullable<AnimationStatement_$0>;
     block: AnimationBlock;
 }
+export type AnimationStatement_$0 = HeritageClause;
 export interface SelectorStatement {
     kind: ASTKinds.SelectorStatement;
     selector: Selector;
@@ -87,6 +99,15 @@ export interface AnimationBlock_$0 {
     kind: ASTKinds.AnimationBlock_$0;
     progress: AnimationProgress;
     element: Block;
+}
+export interface HeritageClause {
+    kind: ASTKinds.HeritageClause;
+    first: Identifier;
+    last: HeritageClause_$0[];
+}
+export interface HeritageClause_$0 {
+    kind: ASTKinds.HeritageClause_$0;
+    next: Identifier;
 }
 export interface Element {
     kind: ASTKinds.Element;
@@ -162,6 +183,7 @@ export class Parser {
         return this.run<StyleStatement>($$dpth,
             () => {
                 let $scope$name: Nullable<Identifier>;
+                let $scope$parents: Nullable<Nullable<StyleStatement_$0>>;
                 let $scope$block: Nullable<Block>;
                 let $$res: Nullable<StyleStatement> = null;
                 if (true
@@ -170,18 +192,24 @@ export class Parser {
                     && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), false) !== null
                     && ($scope$name = this.matchIdentifier($$dpth + 1, $$cr)) !== null
                     && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
+                    && (($scope$parents = this.matchStyleStatement_$0($$dpth + 1, $$cr)) || true)
+                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
                     && ($scope$block = this.matchBlock($$dpth + 1, $$cr)) !== null
                     && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
                 ) {
-                    $$res = {kind: ASTKinds.StyleStatement, name: $scope$name, block: $scope$block};
+                    $$res = {kind: ASTKinds.StyleStatement, name: $scope$name, parents: $scope$parents, block: $scope$block};
                 }
                 return $$res;
             });
+    }
+    public matchStyleStatement_$0($$dpth: number, $$cr?: ErrorTracker): Nullable<StyleStatement_$0> {
+        return this.matchHeritageClause($$dpth + 1, $$cr);
     }
     public matchTransformStatement($$dpth: number, $$cr?: ErrorTracker): Nullable<TransformStatement> {
         return this.run<TransformStatement>($$dpth,
             () => {
                 let $scope$name: Nullable<Identifier>;
+                let $scope$parents: Nullable<Nullable<TransformStatement_$0>>;
                 let $scope$block: Nullable<Block>;
                 let $$res: Nullable<TransformStatement> = null;
                 if (true
@@ -189,19 +217,25 @@ export class Parser {
                     && this.regexAccept(String.raw`(?:transform)`, $$dpth + 1, $$cr) !== null
                     && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), false) !== null
                     && ($scope$name = this.matchIdentifier($$dpth + 1, $$cr)) !== null
-                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), false) !== null
+                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
+                    && (($scope$parents = this.matchTransformStatement_$0($$dpth + 1, $$cr)) || true)
+                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
                     && ($scope$block = this.matchBlock($$dpth + 1, $$cr)) !== null
                     && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
                 ) {
-                    $$res = {kind: ASTKinds.TransformStatement, name: $scope$name, block: $scope$block};
+                    $$res = {kind: ASTKinds.TransformStatement, name: $scope$name, parents: $scope$parents, block: $scope$block};
                 }
                 return $$res;
             });
+    }
+    public matchTransformStatement_$0($$dpth: number, $$cr?: ErrorTracker): Nullable<TransformStatement_$0> {
+        return this.matchHeritageClause($$dpth + 1, $$cr);
     }
     public matchAnimationStatement($$dpth: number, $$cr?: ErrorTracker): Nullable<AnimationStatement> {
         return this.run<AnimationStatement>($$dpth,
             () => {
                 let $scope$name: Nullable<Identifier>;
+                let $scope$parents: Nullable<Nullable<AnimationStatement_$0>>;
                 let $scope$block: Nullable<AnimationBlock>;
                 let $$res: Nullable<AnimationStatement> = null;
                 if (true
@@ -209,14 +243,19 @@ export class Parser {
                     && this.regexAccept(String.raw`(?:animation)`, $$dpth + 1, $$cr) !== null
                     && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), false) !== null
                     && ($scope$name = this.matchIdentifier($$dpth + 1, $$cr)) !== null
-                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), false) !== null
+                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
+                    && (($scope$parents = this.matchAnimationStatement_$0($$dpth + 1, $$cr)) || true)
+                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
                     && ($scope$block = this.matchAnimationBlock($$dpth + 1, $$cr)) !== null
                     && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
                 ) {
-                    $$res = {kind: ASTKinds.AnimationStatement, name: $scope$name, block: $scope$block};
+                    $$res = {kind: ASTKinds.AnimationStatement, name: $scope$name, parents: $scope$parents, block: $scope$block};
                 }
                 return $$res;
             });
+    }
+    public matchAnimationStatement_$0($$dpth: number, $$cr?: ErrorTracker): Nullable<AnimationStatement_$0> {
+        return this.matchHeritageClause($$dpth + 1, $$cr);
     }
     public matchSelectorStatement($$dpth: number, $$cr?: ErrorTracker): Nullable<SelectorStatement> {
         return this.run<SelectorStatement>($$dpth,
@@ -292,6 +331,40 @@ export class Parser {
                     && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
                 ) {
                     $$res = {kind: ASTKinds.AnimationBlock_$0, progress: $scope$progress, element: $scope$element};
+                }
+                return $$res;
+            });
+    }
+    public matchHeritageClause($$dpth: number, $$cr?: ErrorTracker): Nullable<HeritageClause> {
+        return this.run<HeritageClause>($$dpth,
+            () => {
+                let $scope$first: Nullable<Identifier>;
+                let $scope$last: Nullable<HeritageClause_$0[]>;
+                let $$res: Nullable<HeritageClause> = null;
+                if (true
+                    && this.regexAccept(String.raw`(?::)`, $$dpth + 1, $$cr) !== null
+                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
+                    && ($scope$first = this.matchIdentifier($$dpth + 1, $$cr)) !== null
+                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
+                    && ($scope$last = this.loop<HeritageClause_$0>(() => this.matchHeritageClause_$0($$dpth + 1, $$cr), true)) !== null
+                ) {
+                    $$res = {kind: ASTKinds.HeritageClause, first: $scope$first, last: $scope$last};
+                }
+                return $$res;
+            });
+    }
+    public matchHeritageClause_$0($$dpth: number, $$cr?: ErrorTracker): Nullable<HeritageClause_$0> {
+        return this.run<HeritageClause_$0>($$dpth,
+            () => {
+                let $scope$next: Nullable<Identifier>;
+                let $$res: Nullable<HeritageClause_$0> = null;
+                if (true
+                    && this.regexAccept(String.raw`(?:,)`, $$dpth + 1, $$cr) !== null
+                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
+                    && ($scope$next = this.matchIdentifier($$dpth + 1, $$cr)) !== null
+                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
+                ) {
+                    $$res = {kind: ASTKinds.HeritageClause_$0, next: $scope$next};
                 }
                 return $$res;
             });
