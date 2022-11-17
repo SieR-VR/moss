@@ -7,6 +7,7 @@ interface TravelerContext {
 
 export function travelSource(source: Parser.ParseResult): Syntax.SourceFile {
     return {
+        kind: "SourceFile",
         statements: source.ast ? source.ast.stmts.map(travelStatement) : [],
         source: "",
     };
@@ -29,6 +30,7 @@ function travelStatement(statement: Parser.Statement): Syntax.Statement {
 
 function travelImportStatement(statement: Parser.ImportStatement): Syntax.ImportStatement {
     return {
+        kind: "ImportStatement",
         exprs: travelCommaSeperatedList(statement.list),
         path: travelStringLiteral(statement.path),
         _statementBrand: undefined,
@@ -37,6 +39,7 @@ function travelImportStatement(statement: Parser.ImportStatement): Syntax.Import
 
 function travelStyleStatement(statement: Parser.StyleStatement): Syntax.StyleStatement {
     return {
+        kind: "StyleStatement",
         name: travelIdentifier(statement.name),
         heritages: statement.heritages ? travelHeritageClause(statement.heritages) : [],
         block: travelGenericBlock(statement.block),
@@ -46,6 +49,7 @@ function travelStyleStatement(statement: Parser.StyleStatement): Syntax.StyleSta
 
 function travelTransformStatement(statement: Parser.TransformStatement): Syntax.TransformStatement {
     return {
+        kind: "TransformStatement",
         name: travelIdentifier(statement.name),
         heritages: statement.heritages ? travelHeritageClause(statement.heritages) : [],
         block: statement.block ? travelGenericBlock(statement.block) : undefined,
@@ -55,6 +59,7 @@ function travelTransformStatement(statement: Parser.TransformStatement): Syntax.
 
 function travelAnimationStatement(statement: Parser.AnimationStatement): Syntax.AnimationStatement {
     return {
+        kind: "AnimationStatement",
         name: travelIdentifier(statement.name),
         heritages: statement.heritages ? travelHeritageClause(statement.heritages) : [],
         block: statement.block ? travelAnimationBlock(statement.block) : undefined,
@@ -64,6 +69,7 @@ function travelAnimationStatement(statement: Parser.AnimationStatement): Syntax.
 
 function travelGenericBlock(block: Parser.Block): Syntax.GenericBlock {
     return {
+        kind: "GenericBlock",
         elements: block.elements.map(travelGenericElement),
         _blockBrand: undefined,
     };
@@ -71,6 +77,7 @@ function travelGenericBlock(block: Parser.Block): Syntax.GenericBlock {
 
 function travelAnimationBlock(block: Parser.AnimationBlock): Syntax.AnimationBlock {
     return {
+        kind: "AnimationBlock",
         elements: block.elements.map(travelAnimationElement),
         _blockBrand: undefined,
     };
@@ -78,6 +85,7 @@ function travelAnimationBlock(block: Parser.AnimationBlock): Syntax.AnimationBlo
 
 function travelGenericElement(element: Parser.Element): Syntax.GenericElement {
     return {
+        kind: "GenericElement",
         name: travelPropertyName(element.name),
         value: element.value.text,
     };
@@ -85,6 +93,7 @@ function travelGenericElement(element: Parser.Element): Syntax.GenericElement {
 
 function travelAnimationElement(element: Parser.AnimationElement): Syntax.AnimationElement {
     return {
+        kind: "AnimationElement",
         progress: element.progress,
         block: travelGenericBlock(element.block),
     };
@@ -100,18 +109,21 @@ function travelCommaSeperatedList(list: Parser.CommaSeparatedList): Syntax.Ident
 
 function travelIdentifier(identifier: Parser.Identifier): Syntax.Identifier {
     return {
+        kind: "Identifier",
         text: identifier.text,
     };
 }
 
 function travelStringLiteral(literal: Parser.StringLiteral): Syntax.StringLiteral {
     return {
+        kind: "StringLiteral",
         text: literal.text.slice(1, -1), // remove quotes
     };
 }
 
 function travelPropertyName(name: Parser.PropertyName): Syntax.PropertyName {
     return {
+        kind: "PropertyName",
         text: name.text,
     };
 }
