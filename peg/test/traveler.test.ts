@@ -1,4 +1,5 @@
-import { ParseResult, parse } from "../moss.parser";
+import { travelSource } from "../traveler";
+import { parse } from "../moss.parser";
 
 const transform = parse(`
     import ButtonTransform, Props from "./style.moss";
@@ -7,3 +8,6 @@ const transform = parse(`
         position: 0, 0;
     }
 `);
+
+const source = travelSource(transform);
+console.log(source);
