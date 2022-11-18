@@ -1,10 +1,10 @@
 
-interface Token {
+export interface Token {
     value: string
     type: TokenType // 0 = Number, 1 = keyword
 }
 
-enum TokenType {
+export enum TokenType {
     Number,
     Keyword
 }
@@ -40,5 +40,3 @@ function parseNumber(toParse: string): [number, string] {
 
     return [i, value];
 }
-
-console.log(CreateTokens("1+2*3333"));
