@@ -43,14 +43,17 @@ animation animationA
     {
         /**
          [EN]
-         '*' retains inherited or default values
-         Indicates that the value is not changed values
+         'super' object has inherited value or default value => Meaning to use inherited value as it is
+         If you substitute only super objects, it fits the properties of the values
+         You can also import values for a particular object
          
         
          [KR]
-         '*'은 상속받은 값 또는 기본값을 유지함 => 값을 바꾸지 않겠다는것
+         'super'객체는 상속받은 값 또는 기본값을 가지고있음 => 상속값을 그대로 사용하겠다는뜻
+         super 객체로만 대입하면 값의 속성에 맞춰 들어감
+         특정 객체의 값을 불러오기도 가능
          **/
-        position : (-10%, *, *);
+        position : (transformA.position.x - 10%, super, super.position.y);
         rotation : 0d;
         scale : (50% ,*);
     }
