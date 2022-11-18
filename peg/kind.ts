@@ -4,13 +4,17 @@ export enum SyntaxKind {
     TransformStatement = "TransformStatement",
     AnimationStatement = "AnimationStatement",
     ImportStatement = "ImportStatement",
+    SelectorStatement = "SelectorStatement",
     GenericBlock = "GenericBlock",
     AnimationBlock = "AnimationBlock",
+    SelectorBlock = "SelectorBlock",
     GenericElement = "GenericElement",
     AnimationElement = "AnimationElement",
+    SelectorElement = "SelectorElement",
     Identifier = "Identifier",
     PropertyName = "PropertyName",
     StringLiteral = "StringLiteral",
+    Selector = "Selector",
 }
 
 export interface Node {
@@ -57,6 +61,12 @@ export interface ImportStatement extends Statement {
     path: StringLiteral;
 }
 
+export interface SelectorStatement extends Statement {
+    kind: SyntaxKind.SelectorStatement;
+    selector: Selector;
+    block: SelectorBlock;
+}
+
 export interface Block {
     _blockBrand: any;
 }
@@ -71,6 +81,11 @@ export interface AnimationBlock extends Block {
     elements: AnimationElement[];
 }
 
+export interface SelectorBlock extends Block {
+    kind: SyntaxKind.SelectorBlock;
+    elements: SelectorElement[];
+}
+
 export interface GenericElement extends Node {
     kind: SyntaxKind.GenericElement;
     name: PropertyName;
@@ -82,6 +97,8 @@ export interface AnimationElement extends Node {
     progress: string;
     block: GenericBlock;
 }
+
+export type SelectorElement = StyleStatement | TransformStatement | AnimationStatement | SelectorStatement;
 
 export interface Identifier extends Node {
     kind: SyntaxKind.Identifier;
@@ -96,4 +113,10 @@ export interface PropertyName extends Node {
 export interface StringLiteral extends Node {
     kind: SyntaxKind.StringLiteral;
     text: string; // without quotes
+}
+
+export interface Selector extends Node {
+    kind: SyntaxKind.Selector;
+    text: string;
+    selectorKind: "class" | "id" | "tag";
 }

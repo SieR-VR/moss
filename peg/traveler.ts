@@ -23,6 +23,8 @@ function travelStatement(statement: Parser.Statement): Syntax.Statement {
             return travelTransformStatement(statement);
         case "AnimationStatement":
             return travelAnimationStatement(statement);
+        case "SelectorStatement":
+            return travelSelectorStatement(statement);
     }
 
     throw new Error("Unknown statement kind: " + statement.kind);
@@ -67,7 +69,16 @@ function travelAnimationStatement(statement: Parser.AnimationStatement): Syntax.
     };
 }
 
-function travelGenericBlock(block: Parser.Block): Syntax.GenericBlock {
+function travelSelectorStatement(statement: Parser.SelectorStatement): Syntax.SelectorStatement {
+    return {
+        kind: Syntax.SyntaxKind.SelectorStatement,
+        block: travelSelectorBlock(statement.block),
+        selector: travelSelector(statement.selector),
+        _statementBrand: undefined,
+    };
+}
+
+function travelGenericBlock(block: Parser.GenericBlock): Syntax.GenericBlock {
     return {
         kind: Syntax.SyntaxKind.GenericBlock,
         elements: block.elements.map(travelGenericElement),
@@ -83,7 +94,15 @@ function travelAnimationBlock(block: Parser.AnimationBlock): Syntax.AnimationBlo
     };
 }
 
-function travelGenericElement(element: Parser.Element): Syntax.GenericElement {
+function travelSelectorBlock(block: Parser.SelectorBlock): Syntax.SelectorBlock {
+    return {
+        kind: Syntax.SyntaxKind.SelectorBlock,
+        elements: block.elements.map(travelSelectorElement),
+        _blockBrand: undefined,
+    };
+}
+
+function travelGenericElement(element: Parser.GenericElement): Syntax.GenericElement {
     return {
         kind: Syntax.SyntaxKind.GenericElement,
         name: travelPropertyName(element.name),
@@ -97,6 +116,21 @@ function travelAnimationElement(element: Parser.AnimationElement): Syntax.Animat
         progress: element.progress,
         block: travelGenericBlock(element.block),
     };
+}
+
+function travelSelectorElement(element: Parser.SelectorElement): Syntax.SelectorElement {
+    switch (element.kind) {
+        case "StyleStatement":
+            return travelStyleStatement(element);
+        case "TransformStatement":
+            return travelTransformStatement(element);
+        case "AnimationStatement":
+            return travelAnimationStatement(element);
+        case "SelectorStatement":
+            return travelSelectorStatement(element);
+    }
+
+    throw new Error("Unknown selector element kind: " + element.kind);
 }
 
 function travelHeritageClause(clause: Parser.HeritageClause): Syntax.Identifier[] {
@@ -125,6 +159,20 @@ function travelPropertyName(name: Parser.PropertyName): Syntax.PropertyName {
     return {
         kind: Syntax.SyntaxKind.PropertyName,
         text: name.text,
+    };
+}
+
+function travelSelector(selector: Parser.Selector): Syntax.Selector {
+    const selectorKindTable = {
+        "#": "id",
+        ".": "class",
+        "": "tag",
+    };
+
+    return {
+        kind: Syntax.SyntaxKind.Selector,
+        text: selector.text,
+        selectorKind: selectorKindTable[selector.kind],
     };
 }
 

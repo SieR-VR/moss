@@ -1,24 +1,25 @@
 SourceFile := stmts=Statement*
 
-Statement := StyleStatement | TransformStatement | AnimationStatement | ImportStatement
+Statement := StyleStatement | TransformStatement | AnimationStatement | SelectorStatement | ImportStatement
 
-StyleStatement := Whitespace* 'style' Whitespace+ name=Identifier Whitespace* heritages=HeritageClause? Whitespace* block=Block Whitespace*
-TransformStatement := Whitespace* 'transform' Whitespace+ name=Identifier Whitespace* heritages=HeritageClause? Whitespace* block=Block Whitespace* 
+StyleStatement := Whitespace* 'style' Whitespace+ name=Identifier Whitespace* heritages=HeritageClause? Whitespace* block=GenericBlock Whitespace*
+TransformStatement := Whitespace* 'transform' Whitespace+ name=Identifier Whitespace* heritages=HeritageClause? Whitespace* block=GenericBlock Whitespace* 
 AnimationStatement := Whitespace* 'animation' Whitespace+ name=Identifier Whitespace* heritages=HeritageClause? Whitespace* block=AnimationBlock Whitespace*
 ImportStatement := Whitespace* 'import' Whitespace+ list=CommaSeparatedList 'from' Whitespace+ path=StringLiteral Whitespace* ';'
+SelectorStatement := Whitespace* selector=Selector Whitespace* block=SelectorBlock Whitespace*
 
-SelectorStatement := selector=Selector Whitespace+ block=Block
+Block := GenericBlock | AnimationBlock | SelectorBlock
 
-Block := '\{' Whitespace+ elements=Element* '\}'
+GenericBlock := '{' Whitespace+ elements=GenericElement* '}'
 AnimationBlock := '{' Whitespace+ elements=AnimationElement* '}'
-// SelectorBlock := '{' Whitespace+ elements=(element=SelectorElement Whitespace+)* '}'
+SelectorBlock := '{' Whitespace+ elements=SelectorElement* '}'
 
-AnimationElement := progress=AnimationProgress block=Block Whitespace*
+GenericElement := name=PropertyName Whitespace* ':' Whitespace* value=PropertyValue Whitespace* ';' Whitespace*
+AnimationElement := progress=AnimationProgress block=GenericBlock Whitespace*
+SelectorElement := StyleStatement | TransformStatement | AnimationStatement | SelectorStatement
 
 HeritageClause := ':' Whitespace* list=CommaSeparatedList
 CommaSeparatedList := first=Identifier Whitespace* rest={ ',' Whitespace* next=Identifier Whitespace* }*
-
-Element := name=PropertyName Whitespace* ':' Whitespace* value=PropertyValue Whitespace* ';' Whitespace*
 
 Identifier := text='[a-zA-Z_][a-zA-Z0-9_]+'
 StringLiteral := text='"[^"]*"'
