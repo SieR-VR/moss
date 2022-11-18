@@ -6,4 +6,12 @@ const transform = parse(`
     transform ButtonTransform : Transform {
         position: 0, 0;
     }
+
+    .button {
+        transform: ButtonTransform {
+
+        }
+    }
 `);
+
+console.log(JSON.stringify(transform, null, 2));

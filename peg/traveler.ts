@@ -54,7 +54,7 @@ function travelTransformStatement(statement: Parser.TransformStatement): Syntax.
         kind: Syntax.SyntaxKind.TransformStatement,
         name: travelIdentifier(statement.name),
         heritages: statement.heritages ? travelHeritageClause(statement.heritages) : [],
-        block: statement.block ? travelGenericBlock(statement.block) : undefined,
+        block: travelGenericBlock(statement.block),
         _statementBrand: undefined,
     };
 }
@@ -64,7 +64,7 @@ function travelAnimationStatement(statement: Parser.AnimationStatement): Syntax.
         kind: Syntax.SyntaxKind.AnimationStatement,
         name: travelIdentifier(statement.name),
         heritages: statement.heritages ? travelHeritageClause(statement.heritages) : [],
-        block: statement.block ? travelAnimationBlock(statement.block) : undefined,
+        block: travelAnimationBlock(statement.block),
         _statementBrand: undefined,
     };
 }
@@ -118,14 +118,38 @@ function travelAnimationElement(element: Parser.AnimationElement): Syntax.Animat
     };
 }
 
+function travelSelectorStyleElement(element: Parser.SelectorStyleElement): Syntax.SelectorStyleElement {
+    return {
+        kind: Syntax.SyntaxKind.SelectorStyleElement,
+        heritages: element.heritages ? travelHeritageClause(element.heritages) : [],
+        block: travelGenericBlock(element.block),
+    };
+}
+
+function travelSelectorTransformElement(element: Parser.SelectorTransformElement): Syntax.SelectorTransformElement {
+    return {
+        kind: Syntax.SyntaxKind.SelectorTransformElement,
+        heritages: element.heritages ? travelHeritageClause(element.heritages) : [],
+        block: travelGenericBlock(element.block),
+    };
+}
+
+function travelSelectorAnimationElement(element: Parser.SelectorAnimationElement): Syntax.SelectorAnimationElement {
+    return {
+        kind: Syntax.SyntaxKind.SelectorAnimationElement,
+        heritages: element.heritages ? travelHeritageClause(element.heritages) : [],
+        block: travelAnimationBlock(element.block),
+    };
+}
+
 function travelSelectorElement(element: Parser.SelectorElement): Syntax.SelectorElement {
     switch (element.kind) {
-        case "StyleStatement":
-            return travelStyleStatement(element);
-        case "TransformStatement":
-            return travelTransformStatement(element);
-        case "AnimationStatement":
-            return travelAnimationStatement(element);
+        case "SelectorStyleElement":
+            return travelSelectorStyleElement(element);
+        case "SelectorTransformElement":
+            return travelSelectorTransformElement(element);
+        case "SelectorAnimationElement":
+            return travelSelectorAnimationElement(element);
         case "SelectorStatement":
             return travelSelectorStatement(element);
     }

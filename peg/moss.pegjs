@@ -16,7 +16,11 @@ SelectorBlock := '{' Whitespace+ elements=SelectorElement* '}'
 
 GenericElement := name=PropertyName Whitespace* ':' Whitespace* value=PropertyValue Whitespace* ';' Whitespace*
 AnimationElement := progress=AnimationProgress block=GenericBlock Whitespace*
-SelectorElement := StyleStatement | TransformStatement | AnimationStatement | SelectorStatement
+SelectorElement := SelectorStyleElement | SelectorTransformElement | SelectorAnimationElement | SelectorStatement
+
+SelectorStyleElement := Whitespace* 'style' Whitespace* heritages=HeritageClause? Whitespace* block=GenericBlock Whitespace*
+SelectorTransformElement := Whitespace* 'transform' Whitespace* heritages=HeritageClause? Whitespace* block=GenericBlock Whitespace*
+SelectorAnimationElement := Whitespace* 'animation' Whitespace* heritages=HeritageClause? Whitespace* block=AnimationBlock Whitespace*
 
 HeritageClause := ':' Whitespace* list=CommaSeparatedList
 CommaSeparatedList := first=Identifier Whitespace* rest={ ',' Whitespace* next=Identifier Whitespace* }*

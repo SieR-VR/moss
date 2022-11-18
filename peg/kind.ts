@@ -11,6 +11,9 @@ export enum SyntaxKind {
     GenericElement = "GenericElement",
     AnimationElement = "AnimationElement",
     SelectorElement = "SelectorElement",
+    SelectorStyleElement = "SelectorStyleElement",
+    SelectorTransformElement = "SelectorTransformElement",
+    SelectorAnimationElement = "SelectorAnimationElement",
     Identifier = "Identifier",
     PropertyName = "PropertyName",
     StringLiteral = "StringLiteral",
@@ -45,14 +48,14 @@ export interface TransformStatement extends Statement {
     kind: SyntaxKind.TransformStatement;
     name: Identifier;
     heritages: Identifier[];
-    block?: GenericBlock;
+    block: GenericBlock;
 }
 
 export interface AnimationStatement extends Statement {
     kind: SyntaxKind.AnimationStatement;
     name: Identifier;
     heritages: Identifier[];
-    block?: AnimationBlock;
+    block: AnimationBlock;
 }
 
 export interface ImportStatement extends Statement {
@@ -98,7 +101,25 @@ export interface AnimationElement extends Node {
     block: GenericBlock;
 }
 
-export type SelectorElement = StyleStatement | TransformStatement | AnimationStatement | SelectorStatement;
+export interface SelectorStyleElement extends Node {
+    kind: SyntaxKind.SelectorStyleElement;
+    heritages: Identifier[];
+    block: GenericBlock;
+}
+
+export interface SelectorTransformElement extends Node {
+    kind: SyntaxKind.SelectorTransformElement;
+    heritages: Identifier[];
+    block: GenericBlock;
+}
+
+export interface SelectorAnimationElement extends Node {
+    kind: SyntaxKind.SelectorAnimationElement;
+    heritages: Identifier[];
+    block: AnimationBlock;
+}
+
+export type SelectorElement = SelectorStyleElement | SelectorTransformElement | SelectorAnimationElement | SelectorStatement;
 
 export interface Identifier extends Node {
     kind: SyntaxKind.Identifier;

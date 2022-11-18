@@ -13,7 +13,10 @@
 * SelectorBlock := '{' Whitespace+ elements=SelectorElement* '}'
 * GenericElement := name=PropertyName Whitespace* ':' Whitespace* value=PropertyValue Whitespace* ';' Whitespace*
 * AnimationElement := progress=AnimationProgress block=GenericBlock Whitespace*
-* SelectorElement := StyleStatement | TransformStatement | AnimationStatement | SelectorStatement
+* SelectorElement := SelectorStyleElement | SelectorTransformElement | SelectorAnimationElement | SelectorStatement
+* SelectorStyleElement := Whitespace* 'style' Whitespace* heritages=HeritageClause? Whitespace* block=GenericBlock Whitespace*
+* SelectorTransformElement := Whitespace* 'transform' Whitespace* heritages=HeritageClause? Whitespace* block=GenericBlock Whitespace*
+* SelectorAnimationElement := Whitespace* 'animation' Whitespace* heritages=HeritageClause? Whitespace* block=AnimationBlock Whitespace*
 * HeritageClause := ':' Whitespace* list=CommaSeparatedList
 * CommaSeparatedList := first=Identifier Whitespace* rest={ ',' Whitespace* next=Identifier Whitespace* }*
 * Identifier := text='[a-zA-Z_][a-zA-Z0-9_]+'
@@ -53,6 +56,9 @@ export enum ASTKinds {
     SelectorElement_2 = "SelectorElement_2",
     SelectorElement_3 = "SelectorElement_3",
     SelectorElement_4 = "SelectorElement_4",
+    SelectorStyleElement = "SelectorStyleElement",
+    SelectorTransformElement = "SelectorTransformElement",
+    SelectorAnimationElement = "SelectorAnimationElement",
     HeritageClause = "HeritageClause",
     CommaSeparatedList = "CommaSeparatedList",
     CommaSeparatedList_$0 = "CommaSeparatedList_$0",
@@ -129,10 +135,25 @@ export interface AnimationElement {
     block: GenericBlock;
 }
 export type SelectorElement = SelectorElement_1 | SelectorElement_2 | SelectorElement_3 | SelectorElement_4;
-export type SelectorElement_1 = StyleStatement;
-export type SelectorElement_2 = TransformStatement;
-export type SelectorElement_3 = AnimationStatement;
+export type SelectorElement_1 = SelectorStyleElement;
+export type SelectorElement_2 = SelectorTransformElement;
+export type SelectorElement_3 = SelectorAnimationElement;
 export type SelectorElement_4 = SelectorStatement;
+export interface SelectorStyleElement {
+    kind: ASTKinds.SelectorStyleElement;
+    heritages: Nullable<HeritageClause>;
+    block: GenericBlock;
+}
+export interface SelectorTransformElement {
+    kind: ASTKinds.SelectorTransformElement;
+    heritages: Nullable<HeritageClause>;
+    block: GenericBlock;
+}
+export interface SelectorAnimationElement {
+    kind: ASTKinds.SelectorAnimationElement;
+    heritages: Nullable<HeritageClause>;
+    block: AnimationBlock;
+}
 export interface HeritageClause {
     kind: ASTKinds.HeritageClause;
     list: CommaSeparatedList;
@@ -442,16 +463,76 @@ export class Parser {
         ]);
     }
     public matchSelectorElement_1($$dpth: number, $$cr?: ErrorTracker): Nullable<SelectorElement_1> {
-        return this.matchStyleStatement($$dpth + 1, $$cr);
+        return this.matchSelectorStyleElement($$dpth + 1, $$cr);
     }
     public matchSelectorElement_2($$dpth: number, $$cr?: ErrorTracker): Nullable<SelectorElement_2> {
-        return this.matchTransformStatement($$dpth + 1, $$cr);
+        return this.matchSelectorTransformElement($$dpth + 1, $$cr);
     }
     public matchSelectorElement_3($$dpth: number, $$cr?: ErrorTracker): Nullable<SelectorElement_3> {
-        return this.matchAnimationStatement($$dpth + 1, $$cr);
+        return this.matchSelectorAnimationElement($$dpth + 1, $$cr);
     }
     public matchSelectorElement_4($$dpth: number, $$cr?: ErrorTracker): Nullable<SelectorElement_4> {
         return this.matchSelectorStatement($$dpth + 1, $$cr);
+    }
+    public matchSelectorStyleElement($$dpth: number, $$cr?: ErrorTracker): Nullable<SelectorStyleElement> {
+        return this.run<SelectorStyleElement>($$dpth,
+            () => {
+                let $scope$heritages: Nullable<Nullable<HeritageClause>>;
+                let $scope$block: Nullable<GenericBlock>;
+                let $$res: Nullable<SelectorStyleElement> = null;
+                if (true
+                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
+                    && this.regexAccept(String.raw`(?:style)`, $$dpth + 1, $$cr) !== null
+                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
+                    && (($scope$heritages = this.matchHeritageClause($$dpth + 1, $$cr)) || true)
+                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
+                    && ($scope$block = this.matchGenericBlock($$dpth + 1, $$cr)) !== null
+                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
+                ) {
+                    $$res = {kind: ASTKinds.SelectorStyleElement, heritages: $scope$heritages, block: $scope$block};
+                }
+                return $$res;
+            });
+    }
+    public matchSelectorTransformElement($$dpth: number, $$cr?: ErrorTracker): Nullable<SelectorTransformElement> {
+        return this.run<SelectorTransformElement>($$dpth,
+            () => {
+                let $scope$heritages: Nullable<Nullable<HeritageClause>>;
+                let $scope$block: Nullable<GenericBlock>;
+                let $$res: Nullable<SelectorTransformElement> = null;
+                if (true
+                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
+                    && this.regexAccept(String.raw`(?:transform)`, $$dpth + 1, $$cr) !== null
+                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
+                    && (($scope$heritages = this.matchHeritageClause($$dpth + 1, $$cr)) || true)
+                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
+                    && ($scope$block = this.matchGenericBlock($$dpth + 1, $$cr)) !== null
+                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
+                ) {
+                    $$res = {kind: ASTKinds.SelectorTransformElement, heritages: $scope$heritages, block: $scope$block};
+                }
+                return $$res;
+            });
+    }
+    public matchSelectorAnimationElement($$dpth: number, $$cr?: ErrorTracker): Nullable<SelectorAnimationElement> {
+        return this.run<SelectorAnimationElement>($$dpth,
+            () => {
+                let $scope$heritages: Nullable<Nullable<HeritageClause>>;
+                let $scope$block: Nullable<AnimationBlock>;
+                let $$res: Nullable<SelectorAnimationElement> = null;
+                if (true
+                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
+                    && this.regexAccept(String.raw`(?:animation)`, $$dpth + 1, $$cr) !== null
+                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
+                    && (($scope$heritages = this.matchHeritageClause($$dpth + 1, $$cr)) || true)
+                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
+                    && ($scope$block = this.matchAnimationBlock($$dpth + 1, $$cr)) !== null
+                    && this.loop<Whitespace>(() => this.matchWhitespace($$dpth + 1, $$cr), true) !== null
+                ) {
+                    $$res = {kind: ASTKinds.SelectorAnimationElement, heritages: $scope$heritages, block: $scope$block};
+                }
+                return $$res;
+            });
     }
     public matchHeritageClause($$dpth: number, $$cr?: ErrorTracker): Nullable<HeritageClause> {
         return this.run<HeritageClause>($$dpth,
