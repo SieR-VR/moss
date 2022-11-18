@@ -1,50 +1,44 @@
 
-interface Token
-{
-    value : string
-    type : number // 0 = Number, 1 = keyword
+interface Token {
+    value: string
+    type: TokenType // 0 = Number, 1 = keyword
 }
 
-export function CreateTokens(formula:string)
-{
-    let lastTokenType = 0; 
-    let tokens : Token[] = [{type:0, value:''}];
+enum TokenType {
+    Number,
+    Keyword
+}
 
-    const regnum : RegExp = /[^0-9]/;
+const regnum: RegExp = /[0-9]/;
 
-    for(let i = 0; i < formula.length; i++)
-    {
-        while(true)
-        {
-            if(lastTokenType === 0)
-            {
-                if(!Number.isNaN(parseInt(formula[i]))) // is number
-                {
-                    tokens[tokens.length-1] += formula[i];
-                }
-                else // is keyword
-                {
-                    tokens.push(formula[i]);
-                    lastTokenType = 1;
-                    break;
-                }
-            }
-            else
-            {
-                if(Number.isNaN(parseInt(formula[i]))) // is keyword
-                {
-                    tokens[tokens.length-1] += formula[i];
-                }
-                else // is number
-                {
-                    tokens.push(formula[i]);
-                    lastTokenType = 0;
-                    break;
-                }
-            }
+export function CreateTokens(formula: string) {
+    let tokens: Token[] = [];
+    
+    for (let i = 0; i < formula.length;) {
+        if (regnum.test(formula[i])) {
+            const [length, value] = parseNumber(formula.slice(i));
+            tokens.push({ value, type: TokenType.Number });
+            i += length;
+        }
+        else {
+            tokens.push({ value: formula[i], type: TokenType.Keyword });
             i++;
         }
     }
 
     return tokens;
 }
+
+function parseNumber(toParse: string): [number, string] {
+    let value = "";
+    let i = 0;
+
+    while (regnum.test(toParse[i])) {
+        value += toParse[i];
+        i++;
+    }
+
+    return [i, value];
+}
+
+console.log(CreateTokens("1+2*3333"));
