@@ -64,7 +64,7 @@ function statement2CSS(statement : Kind.Statement)
     }
 }
 
-function TransformStatement(statement:Kind.StyleStatement)
+function StyleStatement(statement:Kind.StyleStatement)
 {
     let css = '';
     (statement.block as Kind.GenericBlock).elements.forEach(element => {
@@ -79,9 +79,7 @@ function TransformStatement(statement:Kind.StyleStatement)
     return css;
 }
 
-/** Type mistake **/
-/*
-function AnimationStatement(statement:Kind.AnimationElement)
+function AnimationStatement(statement:Kind.AnimationStatement)
 {
     let css = '';
     (statement.block as Kind.AnimationBlock).elements.forEach(element => {
@@ -90,4 +88,9 @@ function AnimationStatement(statement:Kind.AnimationElement)
 
     return css;
 }
-*/
+
+function TransformStatement(statement:Kind.TransformStatement)
+{
+
+    return css;
+}
